@@ -18,6 +18,6 @@
 		
 	</div>
 	<div class="col-sm-4">
-		mensje
+		@include('products.fragment.aside')
 	</div>
 @endsection

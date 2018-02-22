@@ -7,6 +7,7 @@
 		Listado de productos
 		<a href="{{route('products.create')}}" class="btn btn-primary pull-right">Nuevo</a> <!--*3 -->
 		</h2>
+		@include('products.fragment.info')
 		<table class="table table-hover table-striped">
 			<thead>
 				<tr>
@@ -23,10 +24,20 @@
 							<strong>{{$product->name}}</strong>
 							{{$product->short}} 
 						</td>
-						<td> <a href="{{ route('products.show',$product->id)}}">Ver</a> </td> <!--*7 -->
+						<td> <a href="{{ route('products.show',$product->id)}}" class="btn btn-link">Ver</a> </td> <!--*7 -->
 						
-						<td> <a href="{{ route('products.edit',$product->id)}}">Editar</a> </td> <!--*8 -->
-						<td>Borrar</td>
+						<td> <a href="{{ route('products.edit',$product->id)}}" class="btn btn-link">Editar</a> </td> <!--*8 -->
+						
+
+						<td>
+							<form action="{{ route('products.destroy', $product->id) }}" method="POST"> <!-- *9* -->
+								{{ csrf_field()}} <!-- *10 -->
+								<input type="hidden" name="_method" value="DELETE"> <!-- *11 -->
+								<button class="btn btn-link">borrar</button>								
+							</form>
+						</td>
+
+
 					</tr>
 				@endforeach
 			</tbody>
@@ -35,6 +46,7 @@
 
 	</div>
 	<div class="col-sm-4">
-		mensaje
+		@include('products.fragment.aside') <!-- *11rvpindex -->
+		
 	</div>
 @endsection

@@ -67,7 +67,7 @@ ______________________index.blade.php_______________________
  *3 invocamos al modelo Product para usarlo
  *4 creamos la variable products, llamamos al modelo y le pedimos que traiga todo de la base de datos organizado por id y de forma descendente y paginado
  *5 pasamos a la vista el arreglo con todos los productos que se encuentras almacenados en la variable products
- 
+
 ______________________index.blade.php_______________________
 *4 con un foreach de laravel llamamos a la variable $products que se creo en el ProductController y contiene la consulta a la base de datos con todos los productos, 
 *5 por cada ciclo del foreach se llenan estas columnas con el campo id y el name del elemento actual
@@ -77,7 +77,7 @@ __________ProductController.php_______
 -Configurar metodo para show, el nombre que debe llevar el metodo lo encontramos en routes:list en la seccion de "action" despues del @
 -*6 metodo show con el parametro id
 -*7 llamamos al modelo producto y le pedimos que busque por medio del id
--*8 devolvemos la ruta para mostrar resultados y mandamos el resultado de la consulta en la variable product
+-*8 devolvemos la ruta para mostrar resultados y mandamos el resultado de la consulta en la variable product que es la variable de la linea anterior *7
 
 __________show.blade.php_____
 *3 llamamos a la variable product y le pedimos el campo
@@ -88,3 +88,82 @@ ______________________index.blade.php_______________________
 *7 se llama la ruta products.show y se manda como segundo parametro el id contenido en la variable product
 *8 se llama la ruta products.edit y se manda como segundo parametro el id contenido en la variable product
 
+__________ProductController.php_______
+*9 Se almacena en la variable product el el product que se busca con el id
+*10  se ejecuta la funcion delete en esa variable.
+*11CtrllProduct se devuelve a la pagina anterior con un mensaje, '..' concatena el valor de product en el string
+
+______________________index.blade.php______________________
+*9 para eliminar no se usa url (metodo get) debido a que es inseguro, entonces se usa un formulario con el metodo POST
+*11 el metodo delete que se muestra en el route:list en realidad no existe en html, pero lo que se hace es simular que existe
+*10 crea un campo oculto con el nombre de _token con una serie encriptada que garantiza que el elemento sea eliminado atravez de la aplicación y no externamente
+
+
+_____________________products/fragment/info.blade.php___________________________
+//
+
+*1rvpfinfo si existe una variable de session llamada info 
+*2rvpfinfo boton con la accion de data-dismiss='alert' que le da la orden a bootstrap por medio de javascript para que oculte las etiquetas funcionando bajo la clase bootstrap "alert" 
+*3rvpfinfo esto me trae el contenido de la variable info, en el caso de ProductController.php en el metodo destroy (*11) devuelve un mensaje que se almacena en esta variable "info". 
+*4rvpfinfo
+*5rvpfinfo mensaje de alerta bootstrap
+*3rvpfinfo imprime el contenido de la variable de Session "info"
+-incluimos este archivo en la vista index.blade.php
+
+
+_____________________products/fragment/aside.blade.php___________________________
+este archivo pondra la informació nde ayuda
+*1rvpfaside este mensaje alert debe incluirse en la vista index *11rvpindex
+__________________________________________________________________________________
+
+-instalar laravelcollective en el proyecto
+https://laravelcollective.com/docs/5.3/html
+-  composer require "laravelcollective/html":"^5.3.0"
+
+-crear vistas editar y crear a partir de la plantilla show
+
+
+______________________edit.blade.php___________________________________
+*1rvpedit este boton lleva a la vista index
+_______________________________________________________________
+-Crear vista crear
+
+____________________ProductController.php___________________
+
+*12CtrllProduct crear metodo edit en el controlador 
+*13CtrllProduct las vistas se llaman igual que el metodo, eso es un estandar.
+*14CtrllProduct Creamos el metodo create
+*15CtrllProduct no lleva parametro porque apenas vamos a crear el poducto
+
+_____________________________________________
+-CONFIGURAR LARAVEL COLLECTIVE
+-IR A https://laravelcollective.com/docs/5.3/html
+Y COPIAR ESTA LINEA: Collective\Html\HtmlServiceProvider::class,
+
+______________config/app.php_____________________________
+*1 AGREGAR LINEA Collective\Html\HtmlServiceProvider::class, en Application Service Providers...
+*2 agregar estos alliases en la section de alliases
+	  'Form' => Collective\Html\FormFacade::class,
+      'Html' => Collective\Html\HtmlFacade::class,
+
+____________________fragment/form.blade.php_______________________
+*1rvpfform esto imprimira por medio de interpretacion de laravel y a traves de laravelcollectice una etiqueta asi: 
+<label for="name">Nombre del producto</label>
+
+*2rvpfform el atributo "null" va alli porque sera llenado de forma dinamica en este caso alli ira un nombre
+<input class="form-control" name="name" type="text" value="Et velit facilis." id="name">
+*7rvpfform
+<input class="btn btn-primary" type="submit" value="ENVIAR">
+
+__________________edit.blade.php______________________
+*2rvpedit cuando necesitamos que las etiquetas html se interpreten usamos {!!!!}
+*2rvpedit model([variable,[ruta],metodo]) la variable $product es la que proviene de productcontroller en el metodo edit
+en el segundo parametro hacemos llamado a la ruta products.update que podemos verificar en route:list y le pasamos como pramaetro el id de la variable producto porque asi lo requiere la ruta, por ultimo parametro de model especificamos el metodo que es Put
+*3rvpedit importamos el formulario
+
+______________________create.blade.php___________________________
+*1rvpcreate: Form:open([ruta,metodo Post]) , como el metodo por default es Post entonces dejamos ese parametro en blanco
+
+_______________2018_02_03_093005_create_products_table_____________
+*4DMCREATE_PRODUCTS: para hacer que este campo NO sea obligatorio se le a grega la propiedad nullable() asi:
+ $table->string('name')->nullable();

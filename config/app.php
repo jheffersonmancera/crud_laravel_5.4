@@ -169,13 +169,14 @@ return [
         Laravel\Tinker\TinkerServiceProvider::class,
 
         /*
-         * Application Service Providers...
+         * Application Service Providers... *1
          */
         Rimorsoft\Providers\AppServiceProvider::class,
         Rimorsoft\Providers\AuthServiceProvider::class,
         // Rimorsoft\Providers\BroadcastServiceProvider::class,
         Rimorsoft\Providers\EventServiceProvider::class,
         Rimorsoft\Providers\RouteServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -187,7 +188,7 @@ return [
     | This array of class aliases will be registered when this application
     | is started. However, feel free to register as many as you wish as
     | the aliases are "lazy" loaded so they don't hinder performance.
-    |
+    |*2
     */
 
     'aliases' => [
@@ -225,6 +226,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

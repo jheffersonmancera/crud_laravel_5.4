@@ -16,10 +16,8 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name');//*1
-
+            $table->string('name');//*1 *4DMCREATE_PRODUCTS
             $table->mediumText('short');//*2
-
             $table->text('body');//*3
 
             $table->timestamps();
