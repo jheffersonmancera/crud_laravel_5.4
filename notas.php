@@ -160,6 +160,7 @@ __________________edit.blade.php______________________
 *2rvpedit model([variable,[ruta],metodo]) la variable $product es la que proviene de productcontroller en el metodo edit
 en el segundo parametro hacemos llamado a la ruta products.update que podemos verificar en route:list y le pasamos como pramaetro el id de la variable producto porque asi lo requiere la ruta, por ultimo parametro de model especificamos el metodo que es Put
 *3rvpedit importamos el formulario
+*4rvpedit incrustamos el partial de errores
 
 ______________________create.blade.php___________________________
 *1rvpcreate: Form:open([ruta,metodo Post]) , como el metodo por default es Post entonces dejamos ese parametro en blanco
@@ -167,3 +168,61 @@ ______________________create.blade.php___________________________
 _______________2018_02_03_093005_create_products_table_____________
 *4DMCREATE_PRODUCTS: para hacer que este campo NO sea obligatorio se le a grega la propiedad nullable() asi:
  $table->string('name')->nullable();
+
+
+____________CREAR REQUEST____________
+php artisan make:request ProductRequest
+
+
+___________ProductRequest______________
+*1PRODUCTREQUEST: poner en true el authorize
+*2PRODUCTREQUEST: colocar campos requeridos como obligatorios al guardar en la base de datos
+
+________CREAR METODOS DE ACTUALIZACION Y CREACION DE PRODUCTOS__________
+______________ProductController___________
+*16CtrllProduct: Hacemos uso del ProductRequest
+*17CtrllProduct: Metodo para guardar, en el parametro llamamos al Request para que primero haga la validación de los campos del formulario que ya vienen guardados en la variable $request
+*18CtrllProduct: Metodo para actualizar, en el parametro llamamos al Request para que primero haga la validación de los campos del formulario que ya vienen guardados en la variable $request y como segundo parametro le pasamos el id del producto que va a ser actualizado
+
+____________________________________________________________
+_________error.blade______________
+*1RVFERROR existe una variable global error donde se encuentran todos los errores de validación
+preguntamos con un if si hay errores dentro de la variable actualmente
+*2RVFERROR: esta entidad html genera el simbolo X para el boton de cerrar
+*3RVFERROR: cuando se detecta la presion del boton se cierra el campo alert con el data-dismiss
+*4RVFERROR: recorremos todos los errores y los traemos en la variable error para luego imprimirlos en una lista
+______________________create.blade.php___________________________
+*2rvpcreate: incrustamos el partial de errores
+*3rvpcreate: incrustamos el partial de informacion
+*4rvpcreate: incrustamos el contenido del formulario
+
+______________ProductController___________
+*19CtrllProduct: return $request; con esta prueba podemos ver todo lo que contiene la variable request
+
+______________Product.php________________
+*2Product -Confirmar que existan los campos en el Modelo
+
+______________ProductController___________
+*20CtrllProduct: Encontramos el producto mediante el metodo find y el id y lo guardamos en la variable $product
+*21CtrllProduct: la variable $product contiene en este punto todo el arreglo con los campos consultados en la linea anterior, entonces por medio de = le asignamos un nuevo valor al campo ->name diciendole que tome el campo
+ ->name que traemos guardado en la variable $request desde el formulario de actualizar.
+*22CtrllProduct: Guardamos mediante el metodo save()
+*23CtrllProduct: Creamos una nueva instancia de este producto.
+*24CtrllProduct: Asignamos al valor del campo de la variable un nuevo valor contenido en los campos de request
+*25CtrllProduct: metodo save para  enviar a la base de datos esta nueva instancia de product.
+
+___________CONFIGURACION DEL IDIOMA DE NOTIFICACIONES_____________
+traer todo los archivos de https://github.com/caouecs/Laravel-lang
+resources/lang/es/validation.php
+resources/lang/es/auth.php
+resources/lang/es/pagination.php
+
+_________config/app.php____________
+'locale' => 'es',
+________validation.php________
+*1langes: estos campos remplazan los nombres de los atributos para que aparezcan en el idioma que queremos
+'attributes' => [
+        'name'  => 'Nombre del producto',
+        'short' => 'Descripción breve del producto',
+        'body'  => 'Descripción del producto'
+    ],

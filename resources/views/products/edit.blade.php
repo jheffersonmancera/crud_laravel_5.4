@@ -11,6 +11,8 @@
 
 		<a href="{{ route('products.index')}}" class="btn btn-default">Listado</a> <!-- *1rvpedit -->
 		</h2>
+		@include('products.fragment.error')<!-- *4rvpedit -->
+
 		<h4>{{$product->name}}</h4>
 		
 		{!! Form::model($product, ['route' => ['products.update',$product->id],'method'=>'PUT'])!!}<!-- *2rvpedit -->
